@@ -3,8 +3,8 @@ import { useThemeStore } from "../store/useThemeStore";
 import { Send } from "lucide-react";
 
 const PREVIEW_MESSAGES = [
-  { id: 1, content: "Hi Sp! this is me Abhi?", isSent: false },
-  { id: 2, content: "Welcome Bro have a good day.", isSent: true },
+  { id: 1, content: "Hi Sp! this is me Abhi ✌️", isSent: false },
+  { id: 2, content: "Hey Hii , How are you ?", isSent: true },
 ];
 
 const SettingsPage = () => {
