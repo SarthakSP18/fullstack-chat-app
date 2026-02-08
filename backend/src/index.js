@@ -13,17 +13,35 @@ import { app, server } from "./lib/socket.js";
 
 dotenv.config();
 
-const PORT = process.env.PORT;
+const PORT = process.env.PORT || 5000;
 const __dirname = path.resolve();
 
 app.use(express.json());
 app.use(cookieParser());
+// app.use(
+//   cors({
+//     origin: "http://localhost:5173",
+//     credentials: true,
+//   })
+// );
+const allowedOrigins = [
+  "http://localhost:5173",
+  "https://fullstack-chat-app-dwxo.onrender.com"
+];
+
 app.use(
   cors({
-    origin: "http://localhost:5173",
+    origin: function (origin, callback) {
+      if (!origin || allowedOrigins.includes(origin)) {
+        callback(null, true);
+      } else {
+        callback(new Error("Not allowed by CORS"));
+      }
+    },
     credentials: true,
   })
 );
+
 
 app.get("/api/health", (req, res) => {
   res.status(200).json({ status: "OK" });
