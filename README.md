@@ -27,7 +27,7 @@ A real‑time chat application built with the MERN stack and Socket.IO. You can 
 ---
 ## Demo
 
-https://fullstack-chat-app-dwxo.onrender.com/login
+https://fullstack-chat-app-dwxo.onrender.com/
 
 ## Installation
 
@@ -46,23 +46,27 @@ cd fullstack-chat-app
 npm i
 
  create .env file:
- MONGO_URI=<your_mongo_db_connection_string>
+ MONGODB_URI=<your_mongo_db_connection_string>
+ PORT=PORT_NUMBER
+ JWT_SECRET= enter secret key
+ <!-- get cloudinary credentials -->
+ CLOUDINARY_API_KEY= replace with yours 
+ CLOUDINARY_API_SECRET= replace with yours 
+ CLOUDINARY_CLOUD_NAME= replace with yours 
 
- PORT=5000
-
-npm start
+run the backend / 
+npm run dev
 
 **cd frontend**
 
+run the frontend / 
 npm install
 
-npm start
+npm run dev
 
-Visit http://localhost:3000
+Visit http://localhost:5173
     
 ## License
-
-[MIT](https://choosealicense.com/licenses/mit/)
 
 This project is licensed under the MIT License.
 
