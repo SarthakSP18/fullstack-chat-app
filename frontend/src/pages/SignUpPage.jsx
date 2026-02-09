@@ -16,12 +16,25 @@ const SignUpPage = () => {
 
   const { signup, isSigningUp } = useAuthStore();
 
+  // ✅ NEW: Gmail-only regex
+  const gmailRegex = /^[a-zA-Z0-9._%+-]+@gmail\.com$/;
+
   const validateForm = () => {
-    if (!formData.fullName.trim()) return toast.error("Full name is required");
-    if (!formData.email.trim()) return toast.error("Email is required");
-    if (!/\S+@\S+\.\S+/.test(formData.email)) return toast.error("Invalid email format");
-    if (!formData.password) return toast.error("Password is required");
-    if (formData.password.length < 6) return toast.error("Password must be at least 6 characters");
+    if (!formData.fullName.trim())
+      return toast.error("Full name is required");
+
+    if (!formData.email.trim())
+      return toast.error("Email is required");
+
+    // ✅ FIX: Gmail only validation
+    if (!gmailRegex.test(formData.email))
+      return toast.error("Please enter a valid Gmail address");
+
+    if (!formData.password)
+      return toast.error("Password is required");
+
+    if (formData.password.length < 6)
+      return toast.error("Password must be at least 6 characters");
 
     return true;
   };
@@ -30,7 +43,6 @@ const SignUpPage = () => {
     e.preventDefault();
 
     const success = validateForm();
-
     if (success === true) signup(formData);
   };
 
@@ -54,6 +66,7 @@ const SignUpPage = () => {
           </div>
 
           <form onSubmit={handleSubmit} className="space-y-6">
+            {/* Full Name */}
             <div className="form-control">
               <label className="label">
                 <span className="label-text font-medium">Full Name</span>
@@ -64,14 +77,21 @@ const SignUpPage = () => {
                 </div>
                 <input
                   type="text"
-                  className={`input input-bordered w-full pl-10`}
+                  className="input input-bordered w-full pl-10"
                   placeholder="Your name"
                   value={formData.fullName}
-                  onChange={(e) => setFormData({ ...formData, fullName: e.target.value })}
+                  onChange={(e) =>
+                    setFormData({
+                      ...formData,
+                      // ✅ FIX: allow only letters & spaces
+                      fullName: e.target.value.replace(/[^a-zA-Z\s]/g, ""),
+                    })
+                  }
                 />
               </div>
             </div>
 
+            {/* Email */}
             <div className="form-control">
               <label className="label">
                 <span className="label-text font-medium">Email</span>
@@ -82,14 +102,17 @@ const SignUpPage = () => {
                 </div>
                 <input
                   type="email"
-                  className={`input input-bordered w-full pl-10`}
-                  placeholder="you@example.com"
+                  className="input input-bordered w-full pl-10"
+                  placeholder="you@gmail.com"
                   value={formData.email}
-                  onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                  onChange={(e) =>
+                    setFormData({ ...formData, email: e.target.value })
+                  }
                 />
               </div>
             </div>
 
+            {/* Password */}
             <div className="form-control">
               <label className="label">
                 <span className="label-text font-medium">Password</span>
@@ -100,10 +123,12 @@ const SignUpPage = () => {
                 </div>
                 <input
                   type={showPassword ? "text" : "password"}
-                  className={`input input-bordered w-full pl-10`}
+                  className="input input-bordered w-full pl-10"
                   placeholder="••••••••"
                   value={formData.password}
-                  onChange={(e) => setFormData({ ...formData, password: e.target.value })}
+                  onChange={(e) =>
+                    setFormData({ ...formData, password: e.target.value })
+                  }
                 />
                 <button
                   type="button"
@@ -143,7 +168,6 @@ const SignUpPage = () => {
       </div>
 
       {/* right side */}
-
       <AuthImagePattern
         title="Join our community"
         subtitle="Connect with friends, share moments, and stay in touch with your loved ones."
@@ -151,4 +175,5 @@ const SignUpPage = () => {
     </div>
   );
 };
+
 export default SignUpPage;
