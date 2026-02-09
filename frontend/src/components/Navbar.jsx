@@ -1,9 +1,49 @@
-import { Link } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useAuthStore } from "../store/useAuthStore";
 import { LogOut, MessageSquare, Settings, User } from "lucide-react";
+import toast from "react-hot-toast";
 
 const Navbar = () => {
   const { logout, authUser } = useAuthStore();
+  const location = useLocation();
+  const navigate = useNavigate();
+  const handleSettingsClick = () => {
+    if (location.pathname === "/settings") {
+      navigate(-1); // go back
+    } else {
+      navigate("/settings");
+    }
+  };
+
+  const handleLogout = () => {
+    toast.custom((t) => (
+      <div
+        className={`${t.visible ? "animate-enter" : "animate-leave"
+          } bg-base-100 border border-base-300 rounded-lg shadow-lg p-4 flex flex-col gap-3`}
+      >
+        <p className="text-sm font-medium">Are you sure you want to logout?</p>
+
+        <div className="flex justify-end gap-2">
+          <button
+            className="btn btn-sm btn-ghost"
+            onClick={() => toast.dismiss(t.id)}
+          >
+            Cancel
+          </button>
+
+          <button
+            className="btn btn-sm btn-error"
+            onClick={() => {
+              toast.dismiss(t.id);
+              logout();
+            }}
+          >
+            Logout
+          </button>
+        </div>
+      </div>
+    ));
+  };
 
   return (
     <header
@@ -22,16 +62,14 @@ const Navbar = () => {
           </div>
 
           <div className="flex items-center gap-2">
-            <Link
-              to={"/settings"}
-              className={`
-              btn btn-sm gap-2 transition-colors
-              
-              `}
+            <button
+              onClick={handleSettingsClick}
+              className="btn btn-sm gap-2 transition-colors"
             >
+
               <Settings className="w-4 h-4" />
               <span className="hidden sm:inline">Settings</span>
-            </Link>
+            </button>
 
             {authUser && (
               <>
@@ -40,7 +78,7 @@ const Navbar = () => {
                   <span className="hidden sm:inline">Profile</span>
                 </Link>
 
-                <button className="flex gap-2 items-center" onClick={logout}>
+                <button className="flex gap-2 items-center" onClick={handleLogout}>
                   <LogOut className="size-5" />
                   <span className="hidden sm:inline">Logout</span>
                 </button>
