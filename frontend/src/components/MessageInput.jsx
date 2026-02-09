@@ -11,8 +11,17 @@ const MessageInput = () => {
 
   const handleImageChange = (e) => {
     const file = e.target.files[0];
+
+    if (!file) return;
+
     if (!file.type.startsWith("image/")) {
       toast.error("Please select an image file");
+      return;
+    }
+
+    // 🔴 LIMIT SIZE (example: 2MB)
+    if (file.size > 2 * 1024 * 1024) {
+      toast.error("Image must be less than 2MB");
       return;
     }
 
@@ -22,6 +31,7 @@ const MessageInput = () => {
     };
     reader.readAsDataURL(file);
   };
+
 
   const removeImage = () => {
     setImagePreview(null);
